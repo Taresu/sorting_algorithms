@@ -4,10 +4,12 @@
 
 void BubbleSort (int *vetor, int tamanho) {
 
+  // If aninhado para percorrer o vetor e fazer as iterações
   for(int i=0; i<tamanho; i++) {
     for(int j=0; j<tamanho-1; j++) {
-      int aux = vetor[j];
+      // se o elem da pos atual é maior do que o da próxima pos, "troca-se os elementos de posição"
       if(vetor[j] > vetor[j+1]) {
+        int aux = vetor[j]; // var auxiliar recebe o valor do vet na pos atual
         vetor[j] = vetor[j+1];
         vetor[j+1] = aux;
       }
@@ -35,6 +37,19 @@ void SelectionSort (int *vetor, int tamanho) {
     int aux = vetor[i]; // (1)
     vetor[i] = vetor[ind_min]; // (2)
     vetor[ind_min] = aux; // (3)
+  }
+}
+
+void InsertionSort (int *vetor, int tamanho) {
+
+  // Deve-se criar um tam temp (gradativo) de deck para facilitar a ordenação
+  // Os elementos à esquerda da chave devem trocar de pos com ela, caso forem maiores
+  for (int i = 1; i < tamanho; i++) {
+    for (int j = i; j > 0 && vetor[j-1] > vetor[j]; j--) {
+      int key = vetor[j]; //armazena a chave (elem "fixo" q será comparado)
+      vetor[j] = vetor[j-1]; 
+      vetor[j-1] = key;
+    }
   }
 }
 
@@ -72,13 +87,13 @@ int main () {
     tamanho = k; //ALTERAR PARA tamanho = k;
 
     //int *v1 = (int *)malloc(tamanho * sizeof(int));
-    int *v2 = (int *)malloc(tamanho * sizeof(int));
-    //int *v3 = (int *)malloc(tamanho * sizeof(int));
+    //int *v2 = (int *)malloc(tamanho * sizeof(int));
+    int *v3 = (int *)malloc(tamanho * sizeof(int));
 
     for (i = 0; i < tamanho; i++) {
       //v1[i] = rand() % (tamanho+1);
-      v2[i] = rand() % (tamanho+1);
-      //v3[i] = rand() % (tamanho+1);
+      //v2[i] = rand() % (tamanho+1);
+      v3[i] = rand() % (tamanho+1);
     }  
 
     /*
@@ -92,50 +107,62 @@ int main () {
     if (!Verifica_Ordenacao(v1, tamanho)) {
       printf("Erro: a ordenacao do BubbleSort nao esta correta!\n");
     } 
+
+    start = clock();
+    //Imprimir(v2, tamanho);
+    SelectionSort (v2, tamanho);
+    //Imprimir(v2, tamanho);
+    end = clock();
+    elapsed_time = (end - start)/(double)CLOCKS_PER_SEC;
+    printf("Tempo de execucao (SelectionSort): %.2f\n", elapsed_time);
+    if (!Verifica_Ordenacao(v2, tamanho)) {
+      printf("Erro: a ordenacao do SelectionSort nao esta correta!\n");
+    }
     */
 
-  start = clock();
-  //Imprimir(v2, tamanho);
-  SelectionSort (v2, tamanho);
-  //Imprimir(v2, tamanho);
-  end = clock();
-  elapsed_time = (end - start)/(double)CLOCKS_PER_SEC;
-  printf("Tempo de execucao (SelectionSort): %.2f\n", elapsed_time);
-  if (!Verifica_Ordenacao(v2, tamanho)) {
-    printf("Erro: a ordenacao do SelectionSort nao esta correta!\n");
+    start = clock();
+    //Imprimir(v3, tamanho);
+    InsertionSort (v3, tamanho);
+    //Imprimir(v3, tamanho);
+    end = clock();
+    elapsed_time = (end - start)/(double)CLOCKS_PER_SEC;
+    printf("Tempo de execucao (InsertionSort): %.2f\n", elapsed_time);
+    if (!Verifica_Ordenacao(v3, tamanho)) {
+      printf("Erro: a ordenacao do InsertionSort nao esta correta!\n");
+    }
+    free(v3);
   }
 
   //free(v1);
-  free(v2);
-  //free(v3);
-  }
+  //free(v2);
 
 // CÁLCULO DO TEMPO DE RESPOSTA P/ 250.000 ELEMENTOS
   tamanho = 250000;
 
-    //int *v1 = (int *)malloc(tamanho * sizeof(int));
-    int *v2 = (int *)malloc(tamanho * sizeof(int));
-    //int *v3 = (int *)malloc(tamanho * sizeof(int));
+  //int *v1 = (int *)malloc(tamanho * sizeof(int));
+  //int *v2 = (int *)malloc(tamanho * sizeof(int));
+  int *v3 = (int *)malloc(tamanho * sizeof(int));
 
-    for (i = 0; i < tamanho; i++) {
-      //v1[i] = rand() % (tamanho+1);
-      v2[i] = rand() % (tamanho+1);
-      //v3[i] = rand() % (tamanho+1);
-    }  
+  for (i = 0; i < tamanho; i++) {
+    //v1[i] = rand() % (tamanho+1);
+    //v2[i] = rand() % (tamanho+1);
+    v3[i] = rand() % (tamanho+1);
+  }  
 
-    /*
-    start = clock();
-    //Imprimir(v1, tamanho);
-    BubbleSort (v1, tamanho);
-    //Imprimir(v1, tamanho);
-    end = clock();
-    elapsed_time = (end - start)/(double)CLOCKS_PER_SEC;
-    printf("Tempo de execucao (BubbleSort): %.2f\n", elapsed_time);
-    if (!Verifica_Ordenacao(v1, tamanho)) {
-      printf("Erro: a ordenacao do BubbleSort nao esta correta!\n");
-    } 
-    */ 
+  /*
+  start = clock();
+  //Imprimir(v1, tamanho);
+  BubbleSort (v1, tamanho);
+  //Imprimir(v1, tamanho);
+  end = clock();
+  elapsed_time = (end - start)/(double)CLOCKS_PER_SEC;
+  printf("Tempo de execucao (BubbleSort): %.2f\n", elapsed_time);
+  if (!Verifica_Ordenacao(v1, tamanho)) {
+    printf("Erro: a ordenacao do BubbleSort nao esta correta!\n");
+  } 
+  */ 
 
+  /*
   start = clock();
   //Imprimir(v2, tamanho);
   SelectionSort (v2, tamanho);
@@ -146,25 +173,24 @@ int main () {
   if (!Verifica_Ordenacao(v2, tamanho)) {
     printf("Erro: a ordenacao do SelectionSort nao esta correta!\n");
   }
+  */
 
-/*
   start = clock();
-  Imprimir(v3, tamanho);
+  //Imprimir(v3, tamanho);
   InsertionSort (v3, tamanho);
-  Imprimir(v3, tamanho);
+  //Imprimir(v3, tamanho);
   end = clock();
   elapsed_time = (end - start)/(double)CLOCKS_PER_SEC;
-  printf("Tempo de execução (InsertionSort): %.2f\n", elapsed_time);
+  printf("Tempo de execucao (InsertionSort): %.2f\n", elapsed_time);
   if (!Verifica_Ordenacao(v3, tamanho)) {
-    printf("Erro: a ordenação do InsertionSort não está correta!\n");
+    printf("Erro: a ordenacao do InsertionSort nao esta correta!\n");
   }
- */
 
   printf("\n");
 
   //free (v1);
-  free (v2);  
-  //free (v3);
+  //free (v2);  
+  free (v3);
 
   return 0;
 }
